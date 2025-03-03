@@ -51,4 +51,8 @@ public class JardinageController {
         // Appliquer l'image de fertilisation lorsqu'on clique sur la case
         clickedZone.setFill(new ImagePattern(new Image(imagePath2)));
     }
+
+    private void grandirPlante(timelineevent event){
+        
+    }
 }
