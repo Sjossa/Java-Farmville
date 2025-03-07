@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MarcheController">
+    <center>
+        <TabPane prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+
+                <!-- Onglet Marché : Achat de Graines -->
+                <Tab text="Graines">
+                    <content>
+                        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Achetez des Graines" />
+                            <ListView fx:id="graineList" prefHeight="150.0" prefWidth="500.0" />
+                            <HBox spacing="10">
+                                <Label text="Quantité :" />
+                                <TextField fx:id="quantiteGraine" prefWidth="50.0" />
+                                <Button fx:id="acheterGraine" text="Acheter" />
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- Onglet Marché : Achat d'Animaux -->
+                <Tab text="Animaux">
+                    <content>
+                        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Achetez des Animaux" />
+                            <ListView fx:id="animauxList" prefHeight="150.0" prefWidth="500.0" />
+                            <HBox spacing="10">
+                                <Label text="Quantité :" />
+                                <TextField fx:id="quantiteAnimal" prefWidth="50.0" />
+                                <Button fx:id="acheterAnimal" text="Acheter" />
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- Onglet Panier -->
+                <Tab text="Panier">
+                    <content>
+                        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Votre solde actuel :" />
+                            <Label fx:id="soldeLabel" style="-fx-font-size: 20;" text="1000 pièces" />
+
+                            <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Votre solde après achat :" />
+                            <Label fx:id="balanceLabel" style="-fx-font-size: 20;" text="1000 pièces" />
+
+                            <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Votre Panier :" />
+                            <ListView fx:id="panier" prefHeight="150.0" prefWidth="500.0" />
+
+                            <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Total du panier :" />
+                            <Label fx:id="totalPanierLabel" style="-fx-font-size: 18;" text="0 pièces" />
+
+                            <HBox spacing="20">
+                                <Button fx:id="acheterPanier" text="Acheter" />
+                                <Button fx:id="viderPanier" text="Vider le panier" onAction="#viderPanier"/>
+                            </HBox>
+
+                            <Label fx:id="messageLabel" style="-fx-font-size: 16; -fx-text-fill: red;" text="" />
+                        </VBox>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,32 @@
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<BorderPane fx:id="root" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f1f8e9; -fx-border-color: #388e3c; -fx-border-width: 3; -fx-border-radius: 10;">
+         <children>
+            <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" spacing="20.0">
+               <children>
+                  <Label style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #388e3c;" text="Vérification des Stocks" />
+                  <Label style="-fx-font-size: 18; -fx-text-fill: #388e3c;" text="Entrez le code produit pour vérifier le stock." />
+                  <TextField fx:id="productCodeField" promptText="Code produit" style="-fx-font-size: 16; -fx-padding: 8px; -fx-border-radius: 5px; -fx-border-color: #388e3c;" />
+                  <Button style="-fx-font-size: 18; -fx-background-color: #388e3c; -fx-text-fill: white; -fx-padding: 12px 24px; -fx-border-radius: 10px;" text="Vérifier Stock" fx:id="checkStockButton"/>
+               </children>
+            </VBox>
+            <TableView fx:id="stockTable" layoutY="150.0" prefHeight="250.0" prefWidth="600.0" style="-fx-border-color: #388e3c; -fx-border-width: 2; -fx-border-radius: 10;">
+               <columns>
+                  <TableColumn text="Nom du Produit" fx:id="productNameColumn" prefWidth="200.0" style="-fx-font-size: 16;" />
+                  <TableColumn text="Code Produit" fx:id="productCodeColumn" prefWidth="200.0" style="-fx-font-size: 16;" />
+                  <TableColumn text="Quantité Disponible" fx:id="stockQuantityColumn" prefWidth="200.0" style="-fx-font-size: 16;" />
+               </columns>
+            </TableView>
+            <Label fx:id="stockLabel" layoutY="420.0" layoutX="250.0" style="-fx-font-size: 18; -fx-text-fill: #388e3c;" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
