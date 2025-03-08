@@ -2,9 +2,11 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import models.ProduitMarche;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import models.ProduitMarche;
+import models.ProduitReserve;
+import models.Stock;
 
 public class MarcheController {
 
@@ -24,38 +26,26 @@ public class MarcheController {
 
     @FXML
     public void initialize() {
-        graines.addAll(
-                new ProduitMarche("Blé", "GRA001", 10.0),
-                new ProduitMarche("Maïs", "GRA002", 12.0)
-        );
+        initialiserProduits();
+        configurerListes();
+        panier.setItems(panierProduits);
+        updateUI();
+    }
 
-        animaux.addAll(
-                new ProduitMarche("Vache", "ANI001", 100.0),
-                new ProduitMarche("Poulet", "ANI002", 40.0)
-        );
+    private void initialiserProduits() {
+        graines.addAll(new ProduitMarche("Blé", "GRA001", 10.0),
+                new ProduitMarche("Maïs", "GRA002", 12.0));
 
-        // Personnalisation de l'affichage des listes
-        graineList.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(ProduitMarche item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : item.getNom() + " - " + item.getPrix() + " pièces");
-            }
-        });
+        animaux.addAll(new ProduitMarche("Vache", "ANI001", 100.0),
+                new ProduitMarche("Poulet", "ANI002", 40.0));
+    }
 
-        animauxList.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(ProduitMarche item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : item.getNom() + " - " + item.getPrix() + " pièces");
-            }
-        });
-
+    private void configurerListes() {
         graineList.setItems(graines);
         animauxList.setItems(animaux);
-        panier.setItems(panierProduits);
 
-        updateUI();
+        graineList.setCellFactory(param -> new ProduitCell());
+        animauxList.setCellFactory(param -> new ProduitCell());
     }
 
     @FXML
@@ -69,55 +59,70 @@ public class MarcheController {
     }
 
     private void ajouterProduitAuPanier(ListView<ProduitMarche> listView, TextField quantiteField) {
-        ProduitMarche produitSelectionne = listView.getSelectionModel().getSelectedItem();
-        if (produitSelectionne != null) {
-            try {
-                int quantite = Integer.parseInt(quantiteField.getText().trim());
-                if (quantite <= 0) {
-                    messageLabel.setText("Veuillez entrer une quantité positive !");
-                    return;
-                }
-                panierProduits.add(produitSelectionne.getNom() + " x" + quantite + "     " + produitSelectionne.getPrix() + "piece");
-                quantiteField.clear(); // Effacer le champ après l'ajout
-                updateUI();
-                messageLabel.setText("");
-            } catch (NumberFormatException e) {
-                messageLabel.setText("Veuillez entrer une quantité valide !");
+        ProduitMarche produit = listView.getSelectionModel().getSelectedItem();
+        if (produit == null) return;
+
+        try {
+            int quantite = Integer.parseInt(quantiteField.getText().trim());
+            if (quantite <= 0) {
+                messageLabel.setText("Veuillez entrer une quantité positive !");
+                return;
             }
+            panierProduits.add(produit.getNom() + " x" + quantite);
+            quantiteField.clear();
+            updateUI();
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Veuillez entrer une quantité valide !");
         }
     }
 
     @FXML
     public void acheterPanier() {
-        double totalPanier = panierProduits.stream().mapToDouble(this::calculerPrixTotalProduit).sum();
+        double totalPanier = panierProduits.stream()
+                .mapToDouble(this::calculerPrixTotalProduit)
+                .sum();
 
-        if (solde >= totalPanier) {
-            solde -= totalPanier;
-            panierProduits.clear();
-            updateUI();
-            messageLabel.setText("Achat effectué !");
-        } else {
+        if (solde < totalPanier) {
             messageLabel.setText("Solde insuffisant !");
+            return;
         }
+
+        solde -= totalPanier;
+
+        // Ajouter les produits du panier au stock
+        ajouterProduitsAuStock();
+
+        panierProduits.clear();
+        updateUI();
+        messageLabel.setText("Achat effectué et ajouté à la réserve !");
+    }
+
+    private void ajouterProduitsAuStock() {
+        for (String item : panierProduits) {
+            String[] parts = item.split(" x");
+            String produitNom = parts[0];
+            int quantite = Integer.parseInt(parts[1]);
+
+            // Trouver le prix du produit
+            double prix = trouverPrixProduit(produitNom);
+
+            // Créer un ProduitReserve et l'ajouter au Stock
+            ProduitReserve produitReserve = new ProduitReserve(produitNom, "CODE-" + produitNom, quantite);
+            Stock.getInstance().ajouterProduit(produitReserve);
+        }
+    }
+
+    private double trouverPrixProduit(String produitNom) {
+        return graines.stream().filter(p -> p.getNom().equals(produitNom)).mapToDouble(ProduitMarche::getPrix).findFirst()
+                .orElse(animaux.stream().filter(p -> p.getNom().equals(produitNom)).mapToDouble(ProduitMarche::getPrix).findFirst().orElse(0.0));
     }
 
     private double calculerPrixTotalProduit(String panierItem) {
         String[] parts = panierItem.split(" x");
         String produitNom = parts[0];
-        int quantite = (parts.length > 1) ? Integer.parseInt(parts[1]) : 1;
-        return trouverPrixProduit(produitNom) * quantite;
-    }
+        int quantite = Integer.parseInt(parts[1]);
 
-    private double trouverPrixProduit(String produitNom) {
-        return graines.stream()
-                .filter(produit -> produit.getNom().equals(produitNom))
-                .mapToDouble(ProduitMarche::getPrix)
-                .findFirst()
-                .orElse(animaux.stream()
-                        .filter(produit -> produit.getNom().equals(produitNom))
-                        .mapToDouble(ProduitMarche::getPrix)
-                        .findFirst()
-                        .orElse(0.0));
+        return trouverPrixProduit(produitNom) * quantite;
     }
 
     private void updateUI() {
@@ -130,5 +135,13 @@ public class MarcheController {
     public void viderPanier() {
         panierProduits.clear();
         updateUI();
+    }
+
+    private static class ProduitCell extends ListCell<ProduitMarche> {
+        @Override
+        protected void updateItem(ProduitMarche item, boolean empty) {
+            super.updateItem(item, empty);
+            setText(empty || item == null ? null : item.getNom() + " - " + item.getPrix() + " pièces");
+        }
     }
 }

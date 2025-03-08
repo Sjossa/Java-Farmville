@@ -28,11 +28,16 @@ public class FermeController {
 
     private void changerScene(String fxmlFile) {
         try {
-            Stage stage = (Stage) boutonMarche.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
-            stage.setScene(new Scene(root));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
+
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Nouvelle fenêtre"); // Optionnel : titre de la fenêtre
+            newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
