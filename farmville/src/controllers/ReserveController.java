@@ -1,74 +1,75 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import models.Reserve;
-
-import java.util.Map;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+import models.Produit;
+import models.ProduitMarche;
+import models.ProduitReserve;
 
 public class ReserveController {
 
     @FXML
-    private ListView<String> stockListView;  // Liste pour afficher le stock
-    @FXML
-    private Label reserveLabel;  // Label pour afficher les informations du stock
-    @FXML
-    private Button ajouterButton;  // Bouton pour ajouter une ressource
-    @FXML
-    private Button retirerButton;  // Bouton pour retirer une ressource
-    @FXML
-    private TextField ressourceField;  // Champ de texte pour entrer le nom de la ressource
-    @FXML
-    private TextField quantiteField;  // Champ de texte pour entrer la quantité
+    private TextField searchField;
 
-    private Reserve reserve;
+    @FXML
+    private Label inputPreviewLabel;
 
-    public ReserveController() {
-        reserve = new Reserve();  // Initialisation de la réserve
-    }
+    @FXML
+    private TableView<Produit> stockTable;
+
+    @FXML
+    private TableColumn<Produit, String> productNameColumn;
+
+    @FXML
+    private TableColumn<Produit, String> productCodeColumn;
+
+    @FXML
+    private TableColumn<Produit, Integer> stockQuantityColumn;
+
+    private ObservableList<Produit> stockData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        afficherStock();
+        // Associer les colonnes aux propriétés du modèle Produit
+        productNameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        productCodeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+        stockQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantite"));
+
+        // Ajouter des produits de test
+        stockData.addAll(
+                new ProduitReserve("Blé", "GR001", 50),
+                new ProduitReserve("Maïs", "GR002", 30),
+                new ProduitReserve("Vache", "AN001", 5),
+                new ProduitReserve("Poulet", "AN002", 20)
+        );
+
+        stockTable.setItems(stockData);
+
+        // Écouter l'entrée dans le champ de recherche
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            inputPreviewLabel.setText("Recherche : " + newValue);
+            filtrerStock(newValue);
+        });
     }
 
-    // Méthode pour afficher le stock actuel dans la ListView
-    private void afficherStock() {
-        stockListView.getItems().clear();
-        for (Map.Entry<String, Integer> entry : reserve.getStock().entrySet()) {
-            stockListView.getItems().add(entry.getKey() + " : " + entry.getValue());
-        }
-    }
-
-    // Méthode pour ajouter une ressource à la réserve
-    @FXML
-    private void ajouterStock() {
-        String ressource = ressourceField.getText();
-        int quantite = Integer.parseInt(quantiteField.getText());
-
-        if (ressource != null && !ressource.isEmpty() && quantite > 0) {
-            reserve.ajouterStock(ressource, quantite);
-            afficherStock();  // Mettre à jour la vue du stock
-            ressourceField.clear();
-            quantiteField.clear();
-        }
-    }
-
-    // Méthode pour retirer une ressource du stock
-    @FXML
-    private void retirerStock() {
-        String ressource = ressourceField.getText();
-        int quantite = Integer.parseInt(quantiteField.getText());
-
-        if (ressource != null && !ressource.isEmpty() && quantite > 0) {
-            boolean success = reserve.retirerStock(ressource, quantite);
-            if (success) {
-                afficherStock();  // Mettre à jour la vue du stock
-            } else {
-                reserveLabel.setText("Pas assez de ressources pour retirer.");
+    private void filtrerStock(String recherche) {
+        if (recherche.isEmpty()) {
+            stockTable.setItems(stockData);
+        } else {
+            ObservableList<Produit> filtres = FXCollections.observableArrayList();
+            for (Produit p : stockData) {
+                if (p.getNom().toLowerCase().contains(recherche.toLowerCase()) ||
+                        p.getCode().toLowerCase().contains(recherche.toLowerCase())) {
+                    filtres.add(p);
+                }
             }
-            ressourceField.clear();
-            quantiteField.clear();
+            stockTable.setItems(filtres);
         }
     }
 }

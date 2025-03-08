@@ -2,128 +2,133 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import models.Marche;
-import java.util.HashMap;
-import java.util.Map;
+import models.ProduitMarche;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class MarcheController {
 
     @FXML
-    private ListView<HBox> graineList;  // Liste des ressources disponibles
+    private ListView<ProduitMarche> graineList, animauxList;
     @FXML
-    private ListView<HBox> panier;      // Liste des ressources ajoutées au panier
+    private ListView<String> panier;
     @FXML
-    private Label balanceLabel;         // Label pour afficher le solde total
+    private Label soldeLabel, totalPanierLabel, messageLabel;
     @FXML
-    private Label stockLabel;           // Label pour afficher le stock sélectionné
-    @FXML
-    private Label totalPanierLabel;     // Label pour afficher le total du panier
+    private TextField quantiteGraine, quantiteAnimal;
 
-    private Marche marche;
-    private Map<String, HBox> panierItems; // Stocker les éléments du panier pour mise à jour
-
-    public MarcheController() {
-        marche = new Marche(); // Instancier le marché
-        panierItems = new HashMap<>();
-    }
+    private double solde = 1000;
+    private final ObservableList<String> panierProduits = FXCollections.observableArrayList();
+    private final ObservableList<ProduitMarche> graines = FXCollections.observableArrayList();
+    private final ObservableList<ProduitMarche> animaux = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        marche.initRessources();
-        remplirListeRessources();
+        graines.addAll(
+                new ProduitMarche("Blé", "GRA001", 10.0),
+                new ProduitMarche("Maïs", "GRA002", 12.0)
+        );
 
-        graineList.setOnMouseClicked(event -> {
-            HBox selectedItem = graineList.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                Label resourceLabel = (Label) selectedItem.getChildren().get(0);
-                String ressource = resourceLabel.getText().split(" - ")[0];
-                afficherStock(ressource);
+        animaux.addAll(
+                new ProduitMarche("Vache", "ANI001", 100.0),
+                new ProduitMarche("Poulet", "ANI002", 40.0)
+        );
+
+        // Personnalisation de l'affichage des listes
+        graineList.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(ProduitMarche item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getNom() + " - " + item.getPrix() + " pièces");
             }
         });
-    }
 
-    private void remplirListeRessources() {
-        graineList.getItems().clear();
-        for (String ressource : marche.getRessources().keySet()) {
-            double price = marche.getPrix().get(ressource);
-            int stock = marche.getRessources().get(ressource);
-
-            HBox itemBox = new HBox(10);
-            Label ressourceLabel = new Label(ressource + " - " + price + " pièces (Stock: " + stock + ")");
-            Button ajouterButton = new Button("Ajouter");
-
-            if (stock == 0) {
-                ajouterButton.setDisable(true);
+        animauxList.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(ProduitMarche item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getNom() + " - " + item.getPrix() + " pièces");
             }
+        });
 
-            ajouterButton.setOnAction(e -> ajouterAuPanier(ressource));
+        graineList.setItems(graines);
+        animauxList.setItems(animaux);
+        panier.setItems(panierProduits);
 
-            itemBox.getChildren().addAll(ressourceLabel, ajouterButton);
-            graineList.getItems().add(itemBox);
-        }
-    }
-
-    private void afficherStock(String ressource) {
-        int stock = marche.getRessources().get(ressource);
-        stockLabel.setText("Stock restant: " + stock);
-    }
-
-    private void ajouterAuPanier(String ressource) {
-        int stock = marche.getRessources().get(ressource);
-        if (stock > 0) {
-            marche.getRessources().put(ressource, stock - 1);
-        } else {
-            return;
-        }
-
-        double price = marche.getPrix().get(ressource);
-
-        // Si l'élément existe déjà dans le panier, on incrémente la quantité et le total
-        if (panierItems.containsKey(ressource)) {
-            HBox existingItem = panierItems.get(ressource);
-            Label quantityLabel = (Label) existingItem.getChildren().get(1);
-            Label totalLabel = (Label) existingItem.getChildren().get(2);
-
-            int quantity = Integer.parseInt(quantityLabel.getText().substring(1)) + 1;
-            quantityLabel.setText("x" + quantity);
-
-            double newTotal = price * quantity;
-            totalLabel.setText("Total: " + newTotal + " pièces");
-        } else {
-            // Créer une HBox pour l'élément ajouté au panier
-            HBox panierItem = new HBox(10);
-            Label itemLabel = new Label(ressource);
-            Label quantityLabel = new Label("x1");
-            Label totalLabel = new Label("Total: " + price + " pièces");
-
-            panierItem.getChildren().addAll(itemLabel, quantityLabel, totalLabel);
-            panier.getItems().add(panierItem);
-            panierItems.put(ressource, panierItem);
-        }
-
-        updateBalance();
-        remplirListeRessources();
-    }
-
-    private void updateBalance() {
-        double total = 0;
-
-        for (HBox item : panier.getItems()) {
-            Label totalLabel = (Label) item.getChildren().get(2);
-            total += Double.parseDouble(totalLabel.getText().split(" ")[1]);
-        }
-
-        balanceLabel.setText("Solde: " + total + " pièces");
-        totalPanierLabel.setText("Total du panier: " + total + " pièces");
+        updateUI();
     }
 
     @FXML
-    private void viderPanier() {
-        marche.initRessources();
-        panier.getItems().clear();
-        panierItems.clear();
-        remplirListeRessources();
-        updateBalance();
+    public void ajouterGrainePanier() {
+        ajouterProduitAuPanier(graineList, quantiteGraine);
+    }
+
+    @FXML
+    public void ajouterAnimalPanier() {
+        ajouterProduitAuPanier(animauxList, quantiteAnimal);
+    }
+
+    private void ajouterProduitAuPanier(ListView<ProduitMarche> listView, TextField quantiteField) {
+        ProduitMarche produitSelectionne = listView.getSelectionModel().getSelectedItem();
+        if (produitSelectionne != null) {
+            try {
+                int quantite = Integer.parseInt(quantiteField.getText().trim());
+                if (quantite <= 0) {
+                    messageLabel.setText("Veuillez entrer une quantité positive !");
+                    return;
+                }
+                panierProduits.add(produitSelectionne.getNom() + " x" + quantite + "     " + produitSelectionne.getPrix() + "piece");
+                quantiteField.clear(); // Effacer le champ après l'ajout
+                updateUI();
+                messageLabel.setText("");
+            } catch (NumberFormatException e) {
+                messageLabel.setText("Veuillez entrer une quantité valide !");
+            }
+        }
+    }
+
+    @FXML
+    public void acheterPanier() {
+        double totalPanier = panierProduits.stream().mapToDouble(this::calculerPrixTotalProduit).sum();
+
+        if (solde >= totalPanier) {
+            solde -= totalPanier;
+            panierProduits.clear();
+            updateUI();
+            messageLabel.setText("Achat effectué !");
+        } else {
+            messageLabel.setText("Solde insuffisant !");
+        }
+    }
+
+    private double calculerPrixTotalProduit(String panierItem) {
+        String[] parts = panierItem.split(" x");
+        String produitNom = parts[0];
+        int quantite = (parts.length > 1) ? Integer.parseInt(parts[1]) : 1;
+        return trouverPrixProduit(produitNom) * quantite;
+    }
+
+    private double trouverPrixProduit(String produitNom) {
+        return graines.stream()
+                .filter(produit -> produit.getNom().equals(produitNom))
+                .mapToDouble(ProduitMarche::getPrix)
+                .findFirst()
+                .orElse(animaux.stream()
+                        .filter(produit -> produit.getNom().equals(produitNom))
+                        .mapToDouble(ProduitMarche::getPrix)
+                        .findFirst()
+                        .orElse(0.0));
+    }
+
+    private void updateUI() {
+        soldeLabel.setText("Solde : " + solde + " pièces");
+        double totalPanier = panierProduits.stream().mapToDouble(this::calculerPrixTotalProduit).sum();
+        totalPanierLabel.setText("Total panier : " + totalPanier + " pièces");
+    }
+
+    @FXML
+    public void viderPanier() {
+        panierProduits.clear();
+        updateUI();
     }
 }
