@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.HBox?>
 
-<GridPane gridLinesVisible="true" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FermeController">
+<GridPane gridLinesVisible="true" fx:id="grilleChamps" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.FermeController">
 
     <!-- Définition des 10 colonnes (répartition égale en pourcentage) -->
     <columnConstraints>
@@ -40,6 +40,7 @@
     <HBox spacing="20" alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="10" GridPane.rowIndex="0">
         <Button text="Marché" fx:id="boutonMarche" onAction="#ouvrirMarche" />
         <Button text="Réserve" fx:id="boutonReserve" onAction="#ouvrirReserve" />
+
     </HBox>
 
 </GridPane>

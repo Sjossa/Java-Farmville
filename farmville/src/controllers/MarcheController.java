@@ -33,11 +33,15 @@ public class MarcheController {
     }
 
     private void initialiserProduits() {
-        graines.addAll(new ProduitMarche("Blé", "GRA001", 10.0),
-                new ProduitMarche("Maïs", "GRA002", 12.0));
+        graines.addAll(
+                new ProduitMarche("Blé", "GRA001", 10.0),
+                new ProduitMarche("Maïs", "GRA002", 12.0)
+        );
 
-        animaux.addAll(new ProduitMarche("Vache", "ANI001", 100.0),
-                new ProduitMarche("Poulet", "ANI002", 40.0));
+        animaux.addAll(
+                new ProduitMarche("Vache", "ANI001", 100.0),
+                new ProduitMarche("Poulet", "ANI002", 40.0)
+        );
     }
 
     private void configurerListes() {
@@ -103,18 +107,38 @@ public class MarcheController {
             String produitNom = parts[0];
             int quantite = Integer.parseInt(parts[1]);
 
-            // Trouver le prix du produit
+            // Trouver l'ID et le prix du produit
+            String id = trouverIdProduit(produitNom);
             double prix = trouverPrixProduit(produitNom);
 
             // Créer un ProduitReserve et l'ajouter au Stock
-            ProduitReserve produitReserve = new ProduitReserve(produitNom, "CODE-" + produitNom, quantite);
+            ProduitReserve produitReserve = new ProduitReserve(produitNom, id, quantite);
             Stock.getInstance().ajouterProduit(produitReserve);
         }
     }
 
+    private String trouverIdProduit(String produitNom) {
+        return graines.stream()
+                .filter(p -> p.getNom().equals(produitNom))
+                .map(ProduitMarche::getId)
+                .findFirst()
+                .orElse(animaux.stream()
+                        .filter(p -> p.getNom().equals(produitNom))
+                        .map(ProduitMarche::getId)
+                        .findFirst()
+                        .orElse(null));
+    }
+
     private double trouverPrixProduit(String produitNom) {
-        return graines.stream().filter(p -> p.getNom().equals(produitNom)).mapToDouble(ProduitMarche::getPrix).findFirst()
-                .orElse(animaux.stream().filter(p -> p.getNom().equals(produitNom)).mapToDouble(ProduitMarche::getPrix).findFirst().orElse(0.0));
+        return graines.stream()
+                .filter(p -> p.getNom().equals(produitNom))
+                .mapToDouble(ProduitMarche::getPrix)
+                .findFirst()
+                .orElse(animaux.stream()
+                        .filter(p -> p.getNom().equals(produitNom))
+                        .mapToDouble(ProduitMarche::getPrix)
+                        .findFirst()
+                        .orElse(0.0));
     }
 
     private double calculerPrixTotalProduit(String panierItem) {

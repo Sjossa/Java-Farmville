@@ -4,11 +4,10 @@ public class ProduitReserve extends Produit {
     private int quantite;
 
     public ProduitReserve(String nom, String code, int quantite) {
-        super(nom, code);  // Appelle le constructeur de la classe parent
+        super(nom, code);
         this.quantite = quantite;
     }
 
-    // Getter et setter pour quantite
     public int getQuantite() {
         return quantite;
     }
