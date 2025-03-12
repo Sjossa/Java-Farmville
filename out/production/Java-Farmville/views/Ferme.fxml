@@ -1,49 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane gridLinesVisible="true" fx:id="grilleChamps"
+<GridPane fx:id="grilleChamps"
           xmlns="http://javafx.com/javafx/23.0.1"
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="controllers.FermeController">
 
-    <!-- Définition des colonnes (répartition égale) -->
+    <!-- Définition des colonnes -->
     <columnConstraints>
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
-        <ColumnConstraints percentWidth="10" />
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
+        <ColumnConstraints percentWidth="10"/>
     </columnConstraints>
 
-    <!-- Définition des lignes (répartition égale) -->
+    <!-- Définition des lignes -->
     <rowConstraints>
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="10" />
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
     </rowConstraints>
 
-    <!-- Barre supérieure avec les boutons -->
-    <HBox spacing="20" alignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="10" GridPane.rowIndex="0">
-        <Button text="Marché" fx:id="boutonMarche" onAction="#ouvrirMarche" />
-        <Button text="Réserve" fx:id="boutonReserve" onAction="#ouvrirReserve" />
-        <Button text="Agrandir Grille" fx:id="boutonAgrandir" />
-    </HBox>
+    <!-- Barre de gestion (panneau de commande) -->
+    <Pane GridPane.columnIndex="0" GridPane.columnSpan="10" GridPane.rowIndex="0" prefHeight="60"
+          style="-fx-background-color: #2E2A1F;
+                 -fx-border-color: #A67C52;
+                 -fx-border-width: 4px;
+                 -fx-border-radius: 10px;
+                 -fx-background-radius: 10px;
+                 -fx-padding: 5px;">
+
+        <HBox spacing="15" alignment="CENTER"
+              style="-fx-padding: 10px;">
+
+            <!-- Solde -->
+            <Label fx:id="labelSolde" text="Solde : $0"
+                   style="-fx-font-size: 18px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #E6D3A3;
+                          -fx-effect: dropshadow(gaussian, black, 3, 0, 1, 1);"/>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <!-- Boutons -->
+            <Button text="Marché" fx:id="boutonMarche" onAction="#ouvrirMarche"
+                    style="-fx-background-color: #5E4C3A;
+                           -fx-text-fill: #E6D3A3;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #A67C52;
+                           -fx-border-width: 2px;
+                           -fx-background-radius: 5px;
+                           -fx-padding: 8px 15px;"
+                    onMouseEntered="#hoverEffect"
+                    onMouseExited="#resetEffect"/>
+
+            <Button text="Réserve" fx:id="boutonReserve" onAction="#ouvrirReserve"
+                    style="-fx-background-color: #5E4C3A;
+                           -fx-text-fill: #E6D3A3;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #A67C52;
+                           -fx-border-width: 2px;
+                           -fx-background-radius: 5px;
+                           -fx-padding: 8px 15px;"
+                    onMouseEntered="#hoverEffect"
+                    onMouseExited="#resetEffect"/>
+
+            <Button text="Agrandir Grille" fx:id="boutonAgrandir" onAction="#agrandirGrille"
+                    style="-fx-background-color: #5E4C3A;
+                           -fx-text-fill: #E6D3A3;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #A67C52;
+                           -fx-border-width: 2px;
+                           -fx-background-radius: 5px;
+                           -fx-padding: 8px 15px;"
+                    onMouseEntered="#hoverEffect"
+                    onMouseExited="#resetEffect"/>
+        </HBox>
+    </Pane>
 
 </GridPane>

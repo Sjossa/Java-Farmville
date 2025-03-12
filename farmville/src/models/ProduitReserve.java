@@ -41,9 +41,9 @@ public class ProduitReserve extends Produit {
     private double trouverPrixProduit(String produitNom) {
         switch (produitNom) {
             case "Blé": return 10.0;
-            case "Maïs": return 12.0;
+            case "Carotte": return 12.0;
             case "Vache": return 100.0;
-            case "Poulet": return 40.0;
+            case "Poule": return 40.0;
             default: return 0.0;
         }
     }

@@ -22,7 +22,7 @@ public class AnimalsController {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     private final Map<String, String[]> imagesCroissanceMap = Map.of(
-            "Poule", new String[]{"/ressource/image/Animals/poule_1.png", "/ressource/image/Animals/poule_2.png", "/ressource/image/Animals/poule_3.png"},
+            "Poule", new String[]{"/ressource/image/Animals/poule_1.png", "/ressource/image/Animals/poule_2.png"},
             "Vache", new String[]{"/ressource/image/Animals/vache_1.jpg", "/ressource/image/Animals/vache_2.jpg"}
     );
 
@@ -67,33 +67,41 @@ public class AnimalsController {
     private void afficherCroissance(ImageView enclosImage, String[] images, ProduitReserve animal) {
         final int[] index = {0};
 
-        scheduler.scheduleAtFixedRate(() -> {
-            if (index[0] < images.length) {
-                Platform.runLater(() -> enclosImage.setImage(new Image(getClass().getResourceAsStream(images[index[0]]))));
-                index[0]++;
-            } else {
-                commencerProductionRessource(enclosImage, animal);
-            }
-        }, 0, 2, TimeUnit.SECONDS);
+        scheduler.schedule(() -> {
+            Platform.runLater(() -> enclosImage.setImage(new Image(getClass().getResourceAsStream(images[index[0]]))));
+            index[0]++;
+
+            // Après 10 secondes, afficher la deuxième image et démarrer la production
+            scheduler.schedule(() -> {
+                if (index[0] < images.length) {
+                    Platform.runLater(() -> enclosImage.setImage(new Image(getClass().getResourceAsStream(images[index[0]]))));
+                    commencerProductionRessource(enclosImage, animal);
+                }
+            }, 10, TimeUnit.SECONDS);
+
+        }, 0, TimeUnit.SECONDS);
     }
 
     private void commencerProductionRessource(ImageView enclosImage, ProduitReserve animal) {
+        // Début de la production
         scheduler.scheduleAtFixedRate(() -> {
-            if (animal.getAge() >= 100) {
-                Platform.runLater(() -> {
-                    AlertManager.afficherAlerte("Fin de vie", "L'animal est mort.");
-                    setImage(enclosImage, IMAGE_ENCLOS_VIDE);
-                });
-                stop();
-                return;
-            }
-
-            if ("Vache".equals(animal.getNom())) {
+            if ("Vache".equalsIgnoreCase(animal.getNom())) {
                 Stock.getInstance().ajouterProduit(new ProduitReserve("Lait", "PR_LAIT", 1));
             }
 
-            animal.setAge(animal.getAge() + 10);
+            if ("Poule".equalsIgnoreCase(animal.getNom())) {
+                Stock.getInstance().ajouterProduit(new ProduitReserve("Oeuf", "PR_OEUF", 1));
+            }
+
         }, 0, 5, TimeUnit.SECONDS);
+
+        // Mort de l'animal après 2 minutes (120 secondes)
+        scheduler.schedule(() -> {
+            Platform.runLater(() -> {
+                AlertManager.afficherAlerte("Fin de vie", "L'animal est mort.");
+                setImage(enclosImage, IMAGE_ENCLOS_VIDE);
+            });
+        }, 120, TimeUnit.SECONDS);
     }
 
     private void setImage(ImageView imageView, String path) {

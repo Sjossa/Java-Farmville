@@ -37,10 +37,10 @@ public class MarcheController {
 
     private void initialiserProduits() {
         graines.addAll(new ProduitMarche("Blé", "GRA001", 10.0),
-                new ProduitMarche("Maïs", "GRA002", 12.0));
+                new ProduitMarche("Carotte", "GRA002", 12.0));
 
         animaux.addAll(new ProduitMarche("Vache", "ANI001", 100.0),
-                new ProduitMarche("Poulet", "ANI002", 40.0));
+                new ProduitMarche("Poule", "ANI002", 40.0));
     }
 
     private void configurerListView(ListView<ProduitMarche> listView, ObservableList<ProduitMarche> produits) {

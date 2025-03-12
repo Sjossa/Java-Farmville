@@ -5,21 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e52e8005-c332-48ce-8585-7de261ad82d8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/farmville/src/controllers/AnimalsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/farmville/src/models/Banque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmville/farmville.iml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/farmville.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/controllers/AnimalsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/AnimalsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/controllers/FermeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/FermeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/controllers/GraineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/GraineController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/controllers/MarcheController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/MarcheController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmville/src/models/Produit.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/Produit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmville/src/models/ProduitMarche.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/ProduitMarche.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/models/Banque.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/Banque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/models/ProduitReserve.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/ProduitReserve.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/models/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/Stock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmville/src/ressource/image/graine/graine_ble.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/utils/SceneManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/utils/SceneManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/farmville/src/views/Ferme.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/views/Ferme.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/farmville/src/views/Marche.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/views/Marche.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/AnimalsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/AnimalsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/FermeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/FermeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/GraineController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/GraineController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/MarcheController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/controllers/MarcheController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/models/Banque.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/models/Banque.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/models/ProduitReserve.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/models/ProduitReserve.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/utils/SceneManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/utils/SceneManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java-Farmville/views/Ferme.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Java-Farmville/views/Ferme.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741794078245</updated>
       <workItem from="1741794079625" duration="39000" />
-      <workItem from="1741795944549" duration="3906000" />
+      <workItem from="1741795944549" duration="10498000" />
     </task>
     <servers />
   </component>

@@ -3,7 +3,9 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -12,6 +14,7 @@ import models.Stock;
 import utils.AlertManager;
 import utils.ImageLoader;
 import utils.SceneManager;
+import controllers.MarcheController;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +25,8 @@ public class FermeController {
     private Button boutonMarche, boutonReserve, boutonAgrandir;
     @FXML
     private GridPane grilleChamps;
+    @FXML
+    private Label labelSolde;
 
     private GraineController graineController;
     private AnimalsController animalsController;
@@ -35,7 +40,9 @@ public class FermeController {
         graineController = new GraineController();
         animalsController = new AnimalsController();
 
-        // Récupérer les graines et animaux du stock
+        mettreAJourSolde();
+        Banque.getInstance().soldeProperty().addListener((obs, oldVal, newVal) -> mettreAJourSolde());
+        // Initialiser les ressources depuis le stock
         graineController.setGrainesDisponibles(Stock.getInstance().getProduitsReserve());
         animalsController.setAnimauxDisponibles(Stock.getInstance().getProduitsReserve());
 
@@ -44,20 +51,23 @@ public class FermeController {
 
     @FXML
     private void ouvrirMarche() {
-        SceneManager.changerScene("/views/Marche.fxml", boutonMarche);
+        SceneManager.ouvrirNouvelleFenetre("/views/Marche.fxml", "Marché");
     }
 
     @FXML
     private void ouvrirReserve() {
-        SceneManager.changerScene("/views/Reserve.fxml", boutonReserve);
+        SceneManager.ouvrirNouvelleFenetre("/views/Reserve.fxml", "Réserve");
+    }
+
+    private void mettreAJourSolde() {
+        labelSolde.setText("Solde : " + Banque.getInstance().getSolde() + " pièces");
     }
 
     private void initialiserGrille() {
         for (int ligne = 1; ligne < LIGNES_ACTUELLES; ligne++) {
             for (int colonne = 0; colonne < colonnesActuelles; colonne++) {
-                if (colonne >= 4 && colonne <= 6) continue;
-                String imagePath = (colonne < 5) ? "/ressource/image/enclos.jpg" : "/ressource/image/herbes.png";
-                ajouterCaseGrille(colonne, ligne, imagePath);
+                if (colonne >= 5 && colonne <= 4) continue;
+                ajouterCaseGrille(colonne, ligne, colonne < 5 ? "/ressource/image/enclos.jpg" : "/ressource/image/herbes.png");
             }
         }
     }
@@ -67,12 +77,12 @@ public class FermeController {
         Banque banque = Banque.getInstance();
 
         if (banque.getSolde() < coutAgrandissement) {
-            AlertManager.afficherAlerte("Fonds insuffisants", "Vous avez besoin de " + coutAgrandissement + " dollars pour agrandir la ferme.");
+            AlertManager.afficherAlerte("Fonds insuffisants", "Vous avez besoin de $" + coutAgrandissement + " pour agrandir la ferme.");
             return;
         }
 
-        Optional<String> typeChoisi = demanderTypeExpansion();
-        Optional<String> directionChoisie = demanderDirectionExpansion();
+        Optional<String> typeChoisi = demanderChoix("Agrandissement de la ferme", "Choisissez le type de terrain à ajouter :", "Type :", "Champ", "Enclos");
+        Optional<String> directionChoisie = demanderChoix("Choix de la direction", "Choisissez la direction d'expansion :", "Direction :", "Droite", "Gauche");
 
         if (typeChoisi.isPresent() && directionChoisie.isPresent()) {
             banque.retirerArgent(coutAgrandissement);
@@ -82,31 +92,27 @@ public class FermeController {
         }
     }
 
-    private Optional<String> demanderTypeExpansion() {
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("Champ", "Champ", "Enclos");
-        dialog.setTitle("Agrandissement de la ferme");
-        dialog.setHeaderText("Choisissez le type de terrain à ajouter :");
-        dialog.setContentText("Type :");
-        return dialog.showAndWait();
-    }
-
-    private Optional<String> demanderDirectionExpansion() {
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("Droite", "Droite", "Gauche");
-        dialog.setTitle("Choix de la direction");
-        dialog.setHeaderText("Choisissez la direction d'expansion :");
-        dialog.setContentText("Direction :");
+    private Optional<String> demanderChoix(String titre, String header, String content, String... options) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(options[0], options);
+        dialog.setTitle(titre);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
         return dialog.showAndWait();
     }
 
     private void agrandirSelonDirection(String type, String direction) {
         String imagePath = type.equals("Champ") ? "/ressource/image/herbes.png" : "/ressource/image/enclos.jpg";
-
-        if ("Droite".equals(direction)) {
-            ajouterNouvelleColonne(imagePath, true);
-        } else {
-            ajouterNouvelleColonne(imagePath, false);
-        }
+        ajouterNouvelleColonne(imagePath, "Droite".equals(direction));
         colonnesActuelles++;
+    }
+    @FXML
+    private void hoverEffect(MouseEvent event) {
+        ((Button) event.getSource()).setStyle("-fx-background-color: #ff7043; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 5px 15px;");
+    }
+
+    @FXML
+    private void resetEffect(MouseEvent event) {
+        ((Button) event.getSource()).setStyle("-fx-background-color: #ff5722; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 5px 15px;");
     }
 
     private void ajouterNouvelleColonne(String imagePath, boolean aDroite) {
@@ -115,7 +121,7 @@ public class FermeController {
         grilleChamps.getColumnConstraints().add(col);
 
         int colonneAjout = aDroite ? colonnesActuelles : 0;
-        for (int j = 0; j < LIGNES_ACTUELLES; j++) {
+        for (int j = 1; j < LIGNES_ACTUELLES; j++) {
             ajouterCaseGrille(colonneAjout, j, imagePath);
         }
     }
@@ -153,16 +159,11 @@ public class FermeController {
             return;
         }
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(grainesDisponibles.get(0), grainesDisponibles);
-        dialog.setTitle("Choisir une graine");
-        dialog.setHeaderText("Sélectionnez une graine à planter.");
-        dialog.setContentText("Graine :");
-
-        dialog.showAndWait().ifPresent(graineChoisie ->
-                graineController.getGraineParNom(graineChoisie).ifPresent(graine ->
-                        graineController.planterGraine(graine, champImage)
-                )
-        );
+        demanderChoix("Choisir une graine", "Sélectionnez une graine à planter.", "Graine :", grainesDisponibles.toArray(new String[0]))
+                .ifPresent(graineChoisie ->
+                        graineController.getGraineParNom(graineChoisie)
+                                .ifPresent(graine -> graineController.planterGraine(graine, champImage))
+                );
     }
 
     private void ouvrirDialogueChoixAnimal(ImageView animalImage) {
@@ -172,13 +173,10 @@ public class FermeController {
             return;
         }
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(animauxDisponibles.get(0), animauxDisponibles);
-        dialog.setTitle("Choisir un animal");
-        dialog.setHeaderText("Sélectionnez un animal à ajouter dans l'enclos.");
-        dialog.setContentText("Animal :");
-
-        dialog.showAndWait().ifPresent(animalChoisi ->
-                animalsController.ajouterAnimalEnclos(animalsController.getAnimalParNom(animalChoisi).orElse(null), animalImage)
-        );
+        demanderChoix("Choisir un animal", "Sélectionnez un animal à ajouter dans l'enclos.", "Animal :", animauxDisponibles.toArray(new String[0]))
+                .ifPresent(animalChoisi ->
+                        animalsController.getAnimalParNom(animalChoisi)
+                                .ifPresent(animal -> animalsController.ajouterAnimalEnclos(animal, animalImage))
+                );
     }
 }

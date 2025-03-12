@@ -1,37 +1,35 @@
 package models;
 
-public class Banque {
-    private static Banque instance;
-    private double solde;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
-    private Banque() {
-        this.solde = 1000; // Solde initial
-    }
+public class Banque {
+    private static final Banque instance = new Banque();
+    private final DoubleProperty solde = new SimpleDoubleProperty(1000); // Solde initial
+
+    private Banque() {}
 
     public static Banque getInstance() {
-        if (instance == null) {
-            instance = new Banque();
-        }
         return instance;
     }
 
     public double getSolde() {
-        return solde;
-    }
-
-    public void setSolde(double solde) {
-        this.solde = solde;
+        return solde.get();
     }
 
     public void ajouterArgent(double montant) {
-        solde += montant;
+        solde.set(solde.get() + montant);
     }
 
     public boolean retirerArgent(double montant) {
-        if (solde >= montant) {
-            solde -= montant;
+        if (solde.get() >= montant) {
+            solde.set(solde.get() - montant);
             return true;
         }
         return false;
+    }
+
+    public DoubleProperty soldeProperty() {
+        return solde;
     }
 }

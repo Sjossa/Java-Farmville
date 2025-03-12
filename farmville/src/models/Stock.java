@@ -19,7 +19,7 @@ public class Stock {
     }
 
     public void ajouterProduit(ProduitReserve produit) {
-        ProduitReserve produitExistant = getProduitReserve(produit.getNom());
+        ProduitReserve produitExistant = getProduitReserve(produit.getCode());
 
         if (produitExistant != null) {
             produitExistant.setQuantite(produitExistant.getQuantite() + produit.getQuantite());

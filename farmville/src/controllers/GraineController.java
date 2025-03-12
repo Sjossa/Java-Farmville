@@ -19,8 +19,7 @@ public class GraineController {
 
     private final Map<String, String[]> imagesCroissanceMap = Map.of(
             "Blé", new String[]{"/ressource/image/graine/graine_ble.jpg", "/ressource/image/graine/graine_ble_2.png", "/ressource/image/graine/graine_ble_3.png", "/ressource/image/graine/graine_ble_4.png"},
-            "Carotte", new String[]{"/ressource/image/carotte1.png", "/ressource/image/carotte2.png", "/ressource/image/carotte3.png"},
-            "Tomate", new String[]{"/ressource/image/tomate1.png", "/ressource/image/tomate2.png", "/ressource/image/tomate3.png"}
+            "Carotte", new String[]{"/ressource/image/graine/ressource/image/graine/carotte1.png", "/ressource/image/graine/carotte2.png", "/ressource/image/graine/carotte3.png","/ressource/image/graine/carotte4.png"}
     );
 
     public GraineController() {
