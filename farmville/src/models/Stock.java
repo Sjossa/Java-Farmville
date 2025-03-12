@@ -4,14 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Stock {
-    private static Stock instance; // Singleton pour une seule instance partagée
+    private static Stock instance;
     private final ObservableList<ProduitReserve> produitsReserve;
 
     private Stock() {
         this.produitsReserve = FXCollections.observableArrayList();
     }
 
-    // Retourne l'instance unique de Stock
     public static Stock getInstance() {
         if (instance == null) {
             instance = new Stock();
@@ -19,13 +18,29 @@ public class Stock {
         return instance;
     }
 
-    // Ajouter un produit à la réserve
     public void ajouterProduit(ProduitReserve produit) {
-        produitsReserve.add(produit);
+        ProduitReserve produitExistant = getProduitReserve(produit.getNom());
+
+        if (produitExistant != null) {
+            produitExistant.setQuantite(produitExistant.getQuantite() + produit.getQuantite());
+            if (produitExistant.getQuantite() <= 0) {
+                produitsReserve.remove(produitExistant);
+            }
+        } else {
+            if (produit.getQuantite() > 0) {
+                produitsReserve.add(produit);
+            }
+        }
     }
 
-    // Récupérer la liste des produits dans la réserve
     public ObservableList<ProduitReserve> getProduitsReserve() {
         return produitsReserve;
+    }
+
+    public ProduitReserve getProduitReserve(String nom) {
+        return produitsReserve.stream()
+                .filter(produit -> produit.getNom().equalsIgnoreCase(nom))
+                .findFirst()
+                .orElse(null);
     }
 }

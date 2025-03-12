@@ -4,15 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d8a7c332-010a-4a43-9ed4-848f3d2c665f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+    <list default="true" id="e52e8005-c332-48ce-8585-7de261ad82d8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/farmville/src/controllers/AnimalsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/farmville/src/models/Banque.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Farmville.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/JardinageController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Plateau.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/image/a.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/image/b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/farmville.iml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/farmville.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/controllers/FermeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/FermeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/controllers/GraineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/GraineController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/controllers/MarcheController.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/controllers/MarcheController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/models/Produit.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/Produit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/models/ProduitMarche.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/ProduitMarche.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/models/ProduitReserve.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/ProduitReserve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/models/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/models/Stock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/ressource/image/graine/graine_ble.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/views/Ferme.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/views/Ferme.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/farmville/src/views/Marche.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/farmville/src/views/Marche.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,41 +29,49 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Sjossa&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Sjossa/Java-Farmville.git&quot;,
+    &quot;accountId&quot;: &quot;74b618b6-7274-4ce7-8c5a-b9886ce23a7e&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2toOZUBZpu3FTibyrBPLuuVYLFf" />
+  <component name="ProjectId" id="2uDre5criMF5mSohkkeTSwVguYF" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.1.executor": "Run",
+    "Application.Unnamed.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/johnn/Desktop/Java-Farmville/farmville",
+    "last_opened_file_path": "C:/Users/johnn/Desktop/JAVA-Graph/javafx-sdk-23.0.2/lib/javafx.web.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\johnn\Desktop\Java-Farmville\Java-farmville\src" />
-      <recent name="C:\Users\johnn\Desktop\Java-Farmville\Java-farmville" />
-    </key>
-  </component>
   <component name="RunManager">
-    <configuration name="johnny" type="Application" factoryName="Application">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
       <module name="Java-Farmville" />
       <option name="VM_PARAMETERS" value="--module-path C:\Users\johnn\Desktop\JAVA-Graph\javafx-sdk-23.0.2\lib  --add-modules javafx.controls,javafx.fxml" />
       <method v="2">
@@ -67,25 +82,21 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.39" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.39" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d8a7c332-010a-4a43-9ed4-848f3d2c665f" name="Changes" comment="" />
-      <created>1741015015308</created>
+      <changelist id="e52e8005-c332-48ce-8585-7de261ad82d8" name="Changes" comment="" />
+      <created>1741794078245</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1741015015308</updated>
-      <workItem from="1741015016654" duration="289000" />
-      <workItem from="1741015364143" duration="89000" />
-      <workItem from="1741015791508" duration="451000" />
-      <workItem from="1741016309194" duration="19000" />
-      <workItem from="1741022431308" duration="73000" />
-      <workItem from="1741022549160" duration="91000" />
+      <updated>1741794078245</updated>
+      <workItem from="1741794079625" duration="39000" />
+      <workItem from="1741795944549" duration="3906000" />
     </task>
     <servers />
   </component>

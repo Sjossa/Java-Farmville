@@ -5,24 +5,29 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import models.ProduitReserve;
 import models.Stock;
-import utils.ImageLoader;
+import utils.AlertManager;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GraineController {
 
     private List<ProduitReserve> grainesDisponibles;
-    private final String IMAGE_HERBE = "/ressource/image/herbes.png"; // Image après récolte
+    private final String IMAGE_HERBE = "/ressource/image/herbes.png";
 
-    // Map associant chaque graine à ses images de croissance
     private final Map<String, String[]> imagesCroissanceMap = Map.of(
-            "Blé", new String[]{"/ressource/image/graine/graine_ble.png", "/ressource/image/graine/graine_ble_2.png", "/ressource/image/graine/graine_ble_3.png", "/ressource/image/graine/graine_ble_4.png"},
+            "Blé", new String[]{"/ressource/image/graine/graine_ble.jpg", "/ressource/image/graine/graine_ble_2.png", "/ressource/image/graine/graine_ble_3.png", "/ressource/image/graine/graine_ble_4.png"},
             "Carotte", new String[]{"/ressource/image/carotte1.png", "/ressource/image/carotte2.png", "/ressource/image/carotte3.png"},
             "Tomate", new String[]{"/ressource/image/tomate1.png", "/ressource/image/tomate2.png", "/ressource/image/tomate3.png"}
     );
 
     public GraineController() {
-        this.grainesDisponibles = new ArrayList<>();
+        setGrainesDisponibles(Stock.getInstance().getProduitsReserve()
+                .stream()
+                .filter(p -> p.getCode().startsWith("GRA"))
+                .collect(Collectors.toList()));
     }
 
     public void setGrainesDisponibles(List<ProduitReserve> graines) {
@@ -30,76 +35,73 @@ public class GraineController {
     }
 
     public List<String> getListeNomsGraines() {
-        List<String> nomsGraines = new ArrayList<>();
-        for (ProduitReserve graine : grainesDisponibles) {
-            if (graine.getCode().startsWith("GR")) {
-                nomsGraines.add(graine.getNom());
-            }
-        }
-        return nomsGraines;
+        return grainesDisponibles.stream()
+                .map(ProduitReserve::getNom)
+                .collect(Collectors.toList());
     }
 
-    public ProduitReserve getGraineParNom(String nom) {
-        for (ProduitReserve graine : grainesDisponibles) {
-            if (graine.getNom().trim().equalsIgnoreCase(nom.trim())) {
-                return graine;
-            }
-        }
-        return null;
+    public Optional<ProduitReserve> getGraineParNom(String nom) {
+        return grainesDisponibles.stream()
+                .filter(graine -> graine.getNom().equalsIgnoreCase(nom))
+                .findFirst();
     }
 
     public void planterGraine(ProduitReserve graine, ImageView champImage) {
-        if (graine.getQuantite() > 0) {
+        if (graine != null && graine.getQuantite() > 0) {
             graine.setQuantite(graine.getQuantite() - 1);
+            String[] imagesCroissance = imagesCroissanceMap.get(graine.getNom());
 
-            // Récupérer les images de croissance pour la graine choisie
-            String[] imagesCroissance = imagesCroissanceMap.getOrDefault(graine.getNom(), new String[0]);
-
-            if (imagesCroissance.length > 0) {
+            if (imagesCroissance != null) {
                 afficherCroissance(champImage, imagesCroissance, graine.getNom());
             } else {
-                System.out.println("Aucune image de croissance trouvée pour cette graine.");
+                AlertManager.afficherAlerte("Erreur", "Aucune image de croissance trouvée.");
             }
         } else {
-            System.out.println("Pas assez de graines disponibles pour planter.");
+            AlertManager.afficherAlerte("Erreur", "Pas assez de graines disponibles.");
         }
     }
 
     private void afficherCroissance(ImageView champImage, String[] images, String produitFinal) {
-        new Thread(() -> {
-            for (int i = 0; i < images.length; i++) {
-                final int index = i;
-                Platform.runLater(() -> champImage.setImage(new Image(getClass().getResourceAsStream(images[index]))));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Thread croissanceThread = new Thread(() -> {
+            try {
+                for (String imagePath : images) {
+                    Platform.runLater(() -> champImage.setImage(new Image(getClass().getResourceAsStream(imagePath))));
+                    Thread.sleep(2000); // Pause de 2 secondes entre chaque image
                 }
-            }
 
-            // À la fin de la croissance, activer la récolte par un clic
-            Platform.runLater(() -> champImage.setOnMouseClicked(event -> recolterProduit(champImage, produitFinal)));
-        }).start();
+                // Une fois la croissance terminée, activer la récolte (sans collecte automatique)
+                Platform.runLater(() -> activerRecolte(champImage, produitFinal));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Le thread de croissance a été interrompu.");
+            }
+        });
+
+        croissanceThread.setDaemon(true); // Le thread s'arrête si l'application ferme
+        croissanceThread.start();
+    }
+
+    private void activerRecolte(ImageView champImage, String produitFinal) {
+        champImage.setOnMouseClicked(event -> recolterProduit(champImage, produitFinal));
     }
 
     private void recolterProduit(ImageView champImage, String produitFinal) {
-        // Ajouter le produit final dans le stock
-        Stock.getInstance().ajouterProduit(new ProduitReserve(produitFinal, "pr_" + produitFinal, 1));
+        String codeProduit = "PR_" + produitFinal;
+        ProduitReserve produitRecolte = new ProduitReserve(produitFinal, codeProduit, 1);
 
-        // Remettre l'image d'herbe et réactiver la plantation
+        System.out.println("Récolte de " + produitFinal + " avec code " + codeProduit);
+        Stock.getInstance().ajouterProduit(produitRecolte);
+
         champImage.setImage(new Image(getClass().getResourceAsStream(IMAGE_HERBE)));
-
         champImage.setOnMouseClicked(event -> ouvrirDialogueChoixGraine(champImage));
     }
 
     private void ouvrirDialogueChoixGraine(ImageView champImage) {
-        List<String> grainesDisponibles = getListeNomsGraines();
-
-        if (grainesDisponibles.isEmpty()) {
-            System.out.println("Aucune graine disponible !");
-            return;
+        List<String> graines = getListeNomsGraines();
+        if (!graines.isEmpty()) {
+            getGraineParNom(graines.get(0)).ifPresent(graine -> planterGraine(graine, champImage));
+        } else {
+            AlertManager.afficherAlerte("Erreur", "Aucune graine disponible !");
         }
-
-        planterGraine(getGraineParNom(grainesDisponibles.get(0)), champImage);
     }
 }

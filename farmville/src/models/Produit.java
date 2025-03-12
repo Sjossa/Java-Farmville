@@ -1,6 +1,7 @@
 package models;
 
 public abstract class Produit {
+    protected int age;
     private String nom;
     private String code;
 
@@ -17,7 +18,4 @@ public abstract class Produit {
     public String getCode() {
         return code;
     }
-
-    // Méthode abstraite à implémenter dans les classes dérivées
-    public abstract void afficherDetails();
 }

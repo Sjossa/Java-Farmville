@@ -1,5 +1,4 @@
 package models;
-
 public class ProduitMarche {
 
     private String nom;

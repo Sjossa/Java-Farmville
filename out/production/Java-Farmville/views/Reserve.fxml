@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane fx:id="root" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReserveController">
+   <center>
+      <AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f9f9f9; -fx-border-color: #388e3c; -fx-border-width: 3; -fx-border-radius: 12; -fx-padding: 25;">
+         <children>
+            <!-- Section de recherche -->
+            <VBox alignment="CENTER" layoutX="150.0" layoutY="30.0" spacing="20.0">
+               <children>
+                  <Label style="-fx-font-size: 30; -fx-font-weight: bold; -fx-text-fill: #388e3c; -fx-effect: dropshadow(gaussian, #000000, 10, 0.0, 1, 1);"
+                         text="Vérification des Stocks"/>
+                  <Label style="-fx-font-size: 18; -fx-text-fill: #6b8e23;" text="Entrez le code produit pour vérifier le stock."/>
+                  <TextField fx:id="searchField" promptText="Rechercher un produit"
+                             style="-fx-font-size: 16; -fx-padding: 10px 15px; -fx-background-color: #f1f8e9; -fx-text-fill: #388e3c; -fx-border-radius: 8px; -fx-border-color: #388e3c; -fx-border-width: 2px;"/>
+                  <!-- Label pour afficher la recherche en temps réel -->
+                  <Label fx:id="inputPreviewLabel" style="-fx-font-size: 14; -fx-text-fill: #388e3c;"/>
+               </children>
+            </VBox>
+
+            <!-- Tableau d'affichage des stocks -->
+            <TableView fx:id="stockTable" layoutX="50.0" layoutY="180.0" prefHeight="250.0" prefWidth="600.0"
+                       style="-fx-border-radius: 10; -fx-background-color: #ffffff; -fx-border-color: #388e3c; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, #000000, 10, 0.0, 1, 1);">
+               <columns>
+                  <TableColumn text="Nom du Produit" fx:id="productNameColumn" prefWidth="200.0" style="-fx-font-size: 16; -fx-font-weight: bold;">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="nom"/>
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn text="Code Produit" fx:id="productCodeColumn" prefWidth="200.0" style="-fx-font-size: 16; -fx-font-weight: bold;">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="code"/>
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn text="Quantité Disponible" fx:id="stockQuantityColumn" prefWidth="200.0" style="-fx-font-size: 16; -fx-font-weight: bold;">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="quantite"/>
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
